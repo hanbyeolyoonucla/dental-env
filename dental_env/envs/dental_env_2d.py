@@ -14,7 +14,7 @@ class DentalEnv2D(gym.Env):
         self.observation_space = spaces.Dict(
             {
                 "agent": spaces.Box(0, self.size - 1, shape=(2,), dtype=int),
-                "states": spaces.MultiDiscrete(3 * np.ones(self.size, self.size)),
+                "states": spaces.MultiDiscrete(3 * np.ones((self.size, self.size))),
             }
         )
         self._state_label = {
