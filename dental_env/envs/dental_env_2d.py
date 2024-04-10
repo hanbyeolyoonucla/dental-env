@@ -51,8 +51,8 @@ class DentalEnv2D(gym.Env):
     def reset(self, seed=None, options=None):
         super().reset(seed=seed)
 
-        self._agent_location = np.array([0, np.ceil(self.size / 2) - 1])  # start from top center
-        self._states = self.np_random.integers(0, 3, size=(self.size, self.size))
+        self._agent_location = np.array([0, np.ceil(self.size / 2) - 1], dtype=int)  # start from top center
+        self._states = self.np_random.integers(1, 3, size=(self.size, self.size))
         self._states[:1, :] = 0  # empty space
 
         observation = self._get_obs()
@@ -111,21 +111,21 @@ class DentalEnv2D(gym.Env):
         # draw agent
         pygame.draw.rect(
             canvas,
-            (0, 0, 255, 150),
+            (0, 0, 255, 50),
             pygame.Rect(
-                (0, self._agent_location[1]),
+                (0, pix_square_size * self._agent_location[1]),
                 (pix_square_size * (self._agent_location[0] + 1), pix_square_size),
             )
         )
 
         # draw state
-        for state in self._states:
+        for index, state in np.ndenumerate(self._states):
             if state == self._state_label['decay']:
                 pygame.draw.rect(
                     canvas,
                     (255, 0, 0),
                     pygame.Rect(
-                        pix_square_size * state,
+                        pix_square_size * np.array(index),
                         (pix_square_size, pix_square_size),
                     ),
                 )
@@ -134,7 +134,7 @@ class DentalEnv2D(gym.Env):
                     canvas,
                     (0, 255, 0),
                     pygame.Rect(
-                        pix_square_size * state,
+                        pix_square_size * np.array(index),
                         (pix_square_size, pix_square_size),
                     ),
                 )
